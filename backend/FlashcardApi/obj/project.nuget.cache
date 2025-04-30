@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "CM5uDAi+jY4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\v-aoniani\\source\\repos\\KIU\\flashcards\\backend\\flashcardApi\\FlashcardApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\v-aoniani\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.4\\microsoft.aspnetcore.openapi.9.0.4.nupkg.sha512",
+    "C:\\Users\\v-aoniani\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

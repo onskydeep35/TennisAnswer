@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "question": "Who is known as the King of Pop?",
+      "answer": "Michael Jackson",
+      "category": "Artist",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+        "id": 2,
+        "question": "Who is known as the King of Hip-Hop?",
+        "answer": "Playboi Carti",
+        "category": "Artist",
+        "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+        "id": 3,
+        "question": "Who is known as the King of Trap?",
+        "answer": "Skrillex",
+        "category": "Artist",
+        "createdAt": "2024-01-01T00:00:00Z"
+    }
+]
+  
