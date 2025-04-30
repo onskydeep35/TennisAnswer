@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Flashcard Search</title>
+  <title>Flashcard App</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
       color: #2c3e50;
     }
 
-    #container {
+    #container, #authContainer {
       background-color: #ffffff;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -28,7 +28,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    input[type="text"] {
+    input[type="text"], input[type="password"] {
       padding: 10px;
       width: 80%;
       border: 1px solid #ccc;
@@ -51,7 +51,7 @@
       background-color: #2980b9;
     }
 
-    #answerResult {
+    #answerResult, #authResult {
       margin-top: 20px;
       font-weight: bold;
       font-size: 18px;
@@ -60,9 +60,26 @@
   </style>
 </head>
 <body>
-  <h1>Music Flashcard Search</h1>
 
-  <div id="container">
+  <h1>Flashcard App</h1>
+
+  <!-- 🔐 AUTH SECTION -->
+  <div id="authContainer">
+    <h2>Register</h2>
+    <input type="text" id="regEmail" placeholder="Email"><br>
+    <input type="password" id="regPassword" placeholder="Password"><br>
+    <button onclick="register()">Register</button>
+
+    <h2>Login</h2>
+    <input type="text" id="loginEmail" placeholder="Email"><br>
+    <input type="password" id="loginPassword" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+
+    <p id="authResult"></p>
+  </div>
+
+  <!-- 📘 FLASHCARD SECTION -->
+  <div id="container" style="display:none;">
     <input type="text" id="questionInput" placeholder="Enter your question"><br>
     <button onclick="searchFlashcard()">Search</button>
     <p id="answerResult"></p>
