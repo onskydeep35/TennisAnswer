@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using FlashcardAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add CORS policy
+// Register services BEFORE builder.Build()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -11,10 +15,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+// ✅ Make sure this comes before `builder.Build()`
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=flashcards.db"));
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseCors("AllowAll"); // Apply CORS policy here
+// Optional: Force database creation
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
+}
+
+// Configure the app
+app.UseCors("AllowAll");
 app.MapControllers();
 app.Run();
