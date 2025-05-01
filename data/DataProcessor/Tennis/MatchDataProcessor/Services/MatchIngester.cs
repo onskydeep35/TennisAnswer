@@ -7,9 +7,13 @@ namespace MatchDataProcessor.Services
 {
     public static class MatchIngester
     {
+        /// <summary>
+        /// Ensures the tennis_matches table exists in the SQLite database. 
+        /// Creates the table if it doesn't already exist.
+        /// </summary>
+        /// <param name="connection">An open SQLite database connection.</param>
         public static void EnsureTableExists(SQLiteConnection connection)
         {
-            string dropTableSql = "DROP TABLE IF EXISTS tennis_matches;";
             string createTableSql = @"
                 CREATE TABLE tennis_matches (
                     tourney_id TEXT,
@@ -64,12 +68,6 @@ namespace MatchDataProcessor.Services
                 );
             ";
 
-            using (var dropCmd = new SQLiteCommand(dropTableSql, connection))
-            {
-                dropCmd.ExecuteNonQuery();
-                Console.WriteLine("Dropped existing tennis_matches table if it existed.");
-            }
-
             using (var createCmd = new SQLiteCommand(createTableSql, connection))
             {
                 createCmd.ExecuteNonQuery();
@@ -77,6 +75,12 @@ namespace MatchDataProcessor.Services
             }
         }
 
+        /// <summary>
+        /// Inserts a list of <see cref="Match"/> records into the tennis_matches table.
+        /// Duplicate entries (based on primary key) are ignored.
+        /// </summary>
+        /// <param name="connection">An open SQLite database connection.</param>
+        /// <param name="matches">A list of <see cref="Match"/> objects to be inserted.</param>
         public static void IngestMatches(SQLiteConnection connection, List<Match> matches)
         {
             using var transaction = connection.BeginTransaction();

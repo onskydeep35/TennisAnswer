@@ -6,8 +6,17 @@ using Data.Models.Tennis;
 
 namespace MatchDataProcessor.Services
 {
+    /// <summary>
+    /// Provides functionality to read and parse tennis match data from CSV files.
+    /// </summary>
     public static class MatchProcessor
     {
+        /// <summary>
+        /// Reads a CSV file and converts each row into a <see cref="Match"/> object.
+        /// Skips lines with invalid column counts or values.
+        /// </summary>
+        /// <param name="path">Path to the CSV file containing match data.</param>
+        /// <returns>A list of parsed <see cref="Match"/> objects.</returns>
         public static List<Match> ReadFromCsv(string path)
         {
             var lines = File.ReadAllLines(path);
@@ -21,11 +30,6 @@ namespace MatchDataProcessor.Services
                 try
                 {
                     DateTime? parsedDate = null;
-                    if (!string.IsNullOrWhiteSpace(parts[5]) &&
-                    DateTime.TryParseExact(parts[5], "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dob))
-                    {
-                        parsedDate = dob;
-                    }
 
                     matches.Add(new Match
                     {
@@ -34,7 +38,7 @@ namespace MatchDataProcessor.Services
                         Surface = parts[2],
                         DrawSize = TryInt(parts[3]),
                         TourneyLevel = parts[4],
-                        TourneyDate = parsedDate,
+                        TourneyDate = TryDate(parts[5]),
                         MatchNum = int.Parse(parts[6]),
                         WinnerId = int.Parse(parts[7]),
                         WinnerSeed = parts[8],
@@ -89,9 +93,27 @@ namespace MatchDataProcessor.Services
             return matches;
         }
 
+        /// <summary>
+        /// Attempts to parse a date string in yyyyMMdd format.
+        /// </summary>
+        /// <param name="value">The string to parse.</param>
+        /// <returns>A nullable DateTime value.</returns>
+        private static DateTime? TryDate(string value)
+            => DateTime.TryParseExact(value, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date) ? date : null;
+
+        /// <summary>
+        /// Attempts to parse an integer string.
+        /// </summary>
+        /// <param name="value">The string to parse.</param>
+        /// <returns>A nullable integer.</returns>
         private static int? TryInt(string value)
             => int.TryParse(value, out var result) ? result : null;
 
+        /// <summary>
+        /// Attempts to parse a floating-point string.
+        /// </summary>
+        /// <param name="value">The string to parse.</param>
+        /// <returns>A nullable double.</returns>
         private static double? TryDouble(string value)
             => double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result) ? result : null;
     }
