@@ -1,68 +1,96 @@
-# TODO – Music Flashcard App
+# ✅ TODO – Tennis Flashcard Data & Search Tool
 
-very very very very very initial todo
-
-Organized by functional areas: Backend + Data, Frontend, General Improvements
+Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, Search System, Frontend (Optional), and General Improvements.
 
 ---
 
-## BACKEND + DATA (ASP.NET Core + Storage Architecture)
+## 🎾 BACKEND + DATA INGESTION (ASP.NET Core API + SQLite)
 
-### Core API Development
-- [x] Set up ASP.NET Core Web API project
-- [x] Define `Flashcard` model
-- [x] Implement `GET /flashcard` and `POST /flashcard` endpoints
-- [x] Enable CORS for frontend
-- [x] Load flashcards from `flashcards.json`
-- [x] Validate question/answer input on POST
-- [x] Add detailed logging for flashcard load and POST
-- [ ] Add `GET /flashcard/{question}` for direct query
-- [ ] Add filtering support by category
-- [ ] Add random flashcard endpoint
+### Core API & Auth
+- [x] Set up ASP.NET Core Web API project  
+- [x] Set up basic user authorization system  
+- [x] Define `Flashcard` models and routing structure  
+- [x] Create API controller(s) for accessing flashcards  
+- [x] Enable CORS for frontend  
+- [x] Log API requests and errors  
 
-### Serialization & Storage Transition
-- [x] Store flashcards in `flashcards.json` for development
-- [ ] Define Bond schema for `Flashcard` object
-- [ ] Generate Bond C# classes using `bondc`
-- [ ] Migrate serialization logic from JSON → Bond
-- [ ] Replace List-based storage with key/value structure (question → Flashcard)
-- [ ] Create key/value-compatible read/write helper methods
-- [ ] Introduce abstraction layer to switch between raw JSON and Bond-based schema
-- [ ] Add schema compatibility testing for Bond evolution
+### Player & Match Data Ingestion
+- [x] Create SQLite database and `tennis_players` table  
+- [x] Implement CSV ingestion for players (`PlayerProcessor`)  
+- [x] Implement player-to-country and hand mapping (via `Constants`)  
+- [ ] Design schema for `tennis_matches` table  
+- [ ] Build CSV/JSON ingestion for matches  
+- [ ] Add tournament + year data model  
+- [ ] Parse matches into match history records between players  
+- [ ] Add player-metadata enrichment (e.g., Grand Slam titles, rankings if possible)  
 
 ---
 
-## FRONTEND (HTML + JavaScript)
+## 📇 FLASHCARD ENGINE
 
-- [x] Build minimal UI with search box and answer result
-- [x] Connect frontend to API using `fetch`
-- [x] Style with centered layout and colors
-- [x] Display “No match found” if question doesn't exist
-- [ ] Add support for searching partial questions (fuzzy match)
-- [ ] Add dropdown filter by flashcard category
-- [ ] Add “Next Random” flashcard button
-- [ ] Create UI to add a new flashcard
-- [ ] Add animated card reveal effect
-- [ ] Make page mobile responsive
+### Flashcard Types
+- [x] Define `PlayerFlashcard` model  
+- [ ] Define `MatchFlashcard` model (head-to-head or specific match)  
+- [ ] Add flashcard rendering methods (to plain text or HTML)  
+- [ ] Add "pronunciation" field for flashcard (generated via CMUdict or eSpeak)  
+- [ ] Support flashcard categories: `Player`, `Match`, `Tournament`, `FunFact`  
 
----
-
-## GENERAL IMPROVEMENTS
-
-- [x] Create TODO.md to track tasks
-- [ ] Add `README.md` with setup, usage, and build instructions
-- [ ] Add test project with basic xUnit coverage
-- [ ] Add logging for all API calls
-- [ ] Create GitHub repo and push code
-- [ ] Create `LICENSE` (MIT preferred)
-- [ ] Add GitHub Issues for tracking features & bugs
+### Flashcard Storage & Serving
+- [x] Serve flashcards from API  
+- [ ] Support `GET /flashcard/{question}`  
+- [ ] Add filtering by flashcard category  
+- [ ] Add `GET /flashcard/random` endpoint  
+- [ ] Migrate to key/value structure: `question → flashcard object`  
+- [ ] (Optional) Create Bond schema for flashcards  
 
 ---
 
-## FUTURE IDEAS
+## 🔎 INTERACTIVE SEARCH SYSTEM
 
-- [ ] Support multiple languages for flashcards
-- [ ] Group flashcards into decks
-- [ ] Add spaced repetition scheduling
-- [ ] Use localStorage or IndexedDB in browser for offline caching
-- [ ] Create Chrome/Edge browser extension for quick review mode
+### Search Engine & Matching Logic
+- [ ] Implement autocomplete engine (`"Rog"` → `"Roger Federer"`)  
+- [ ] Add fuzzy matching (e.g., `"Fed vs Nadal"` → `MatchFlashcard`)  
+- [ ] Tokenize queries to detect player-vs-player patterns  
+- [ ] Support query routing:
+  - Single player → `PlayerFlashcard`  
+  - "A vs B" → `MatchFlashcard`  
+- [ ] Add query parser class to handle special patterns (year, surface, tournament)  
+
+### Search Input UX (Console or Web)
+- [ ] Show suggestions as user types  
+- [ ] Display matched flashcard on selection  
+- [ ] Show fallback or "no match found" message  
+
+---
+
+## 🖥 FRONTEND (Optional - For Web Version)
+
+- [ ] Minimal UI: input box, result panel  
+- [ ] Integrate backend search API  
+- [ ] Add filter by card type (Player / Match)  
+- [ ] Add keyboard navigation through results  
+- [ ] Add “Next Random Flashcard” button  
+- [ ] Make page mobile responsive  
+- [ ] Add animated reveal effect for flashcards  
+
+---
+
+## ⚙ GENERAL IMPROVEMENTS
+
+- [x] Create `TODO.md` for planning  
+- [ ] Add `README.md` with overview, usage, and setup instructions  
+- [ ] Add test project with xUnit for data ingestion and parsing  
+- [ ] Add integration tests for flashcard API  
+- [ ] Create GitHub repo for version tracking  
+- [ ] Add `LICENSE` (MIT)  
+
+---
+
+## 🚀 FUTURE IDEAS
+
+- [ ] Add `TournamentFlashcard` (e.g., Wimbledon 2019 overview)  
+- [ ] Add pronunciation/audio support using eSpeak or pre-generated MP3s  
+- [ ] Add full player match history lookup  
+- [ ] Create quiz or training mode with spaced repetition  
+- [ ] Enable browser extension for in-page flashcard lookup  
+- [ ] Develop lightweight API + mobile-first UI  
