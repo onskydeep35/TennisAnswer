@@ -90,7 +90,7 @@ function searchPlayerFlashcard() {
 function searchMatchFlashcard() {
   const tourneyId = document.getElementById("matchTourneyId").value.trim();
   const winnerId = document.getElementById("matchWinnerId").value.trim();
-  const loserId = document.getElementById("matchLoserId").value.trim();
+  const loserId  = document.getElementById("matchLoserId").value.trim();
   const resultEl = document.getElementById("matchResult");
   resultEl.textContent = "";
 
@@ -123,21 +123,74 @@ function searchMatchFlashcard() {
         ];
       }
 
+      function highlightSetScore(wGame, lGame) {
+        if (wGame == null && lGame == null) return ['-', '-'];
+        if (wGame > lGame) return [
+          `<span class="text-black font-bold">${wGame}</span>`,
+          `<span class="text-gray-500">${lGame}</span>`
+        ];
+        if (lGame > wGame) return [
+          `<span class="text-gray-500">${wGame}</span>`,
+          `<span class="text-black font-bold">${lGame}</span>`
+        ];
+        return [wGame ?? '-', lGame ?? '-'];
+      }
+
       const [firstServeW, firstServeL]       = highlightStat(result.winner.firstServe, result.loser.firstServe);
       const [firstServeWinW, firstServeWinL] = highlightStat(result.winner.firstServeWin, result.loser.firstServeWin);
       const [secondServeWinW, secondServeWinL] = highlightStat(result.winner.secondServeWin, result.loser.secondServeWin);
       const [acesW, acesL]                   = highlightStat(result.winner.aces, result.loser.aces);
-      const [dfW, dfL]                       = highlightStat(result.winner.doubleFaults, result.loser.doubleFaults, true); // lower is better
+      const [dfW, dfL]                       = highlightStat(result.winner.doubleFaults, result.loser.doubleFaults, true);
       const [bpW, bpL]                       = highlightStat(result.winner.breakPoints, result.loser.breakPoints);
       const [sgwW, sgwL]                     = highlightStat(result.winner.serviceGamesWon, result.loser.serviceGamesWon);
+      const [tpwW, tpwL]                     = highlightStat(result.winner.totalPointsWon, result.loser.totalPointsWon);
+      const [spwW, spwL]                     = highlightStat(result.winner.servePointsWon, result.loser.servePointsWon);
+      const [rpwW, rpwL]                     = highlightStat(result.winner.receivingPointsWon, result.loser.receivingPointsWon);
+
+      const finishNote = (result.gameFinishStatus === "Walkover" || result.gameFinishStatus === "Retired")
+        ? `<div class="text-red-600 font-semibold text-sm mb-2">${result.gameFinishStatus.toUpperCase()}</div>`
+        : "";
+
+      let setHeader = '';
+      let setRowW = '';
+      let setRowL = '';
+      for (let i = 1; i <= 5; i++) {
+        const w = result.winner[`set${i}Games`];
+        const l = result.loser[`set${i}Games`];
+        if (w == null && l == null) continue;
+
+        const [hw, hl] = highlightSetScore(w, l);
+        setHeader += `<th class="p-2 text-center">Set ${i}</th>`;
+        setRowW += `<td class="p-2">${hw}</td>`;
+        setRowL += `<td class="p-2">${hl}</td>`;
+      }
 
       resultEl.innerHTML = `
         <div class="match-summary mb-6">
+          ${finishNote}
           <h3 class="text-2xl font-bold text-gray-900">${result.tournament}</h3>
-          <p class="text-sm text-gray-500">${result.date} &bull; ${result.round} &bull; Surface: <span class="font-medium">${result.surface}</span></p>
-          <div class="mt-4 inline-block bg-blue-100 text-blue-900 font-semibold px-4 py-2 rounded-lg shadow-sm text-base">
-            Final Score: ${result.score}
-          </div>
+          <p class="text-sm text-gray-500">${result.date} &bull; Surface: <span class="font-medium">${result.surface}</span></p>
+        </div>
+
+        <div class="mb-6">
+          <table class="w-full text-sm table-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+            <thead class="bg-gray-100 text-gray-700">
+              <tr>
+                <th class="p-2 text-left font-semibold text-gray-700">${result.round}</th>
+                ${setHeader}
+              </tr>
+            </thead>
+            <tbody class="bg-white text-center">
+              <tr>
+                <td class="text-left p-2">${result.winner.name}</td>
+                ${setRowW}
+              </tr>
+              <tr>
+                <td class="text-left p-2 text-gray-500">${result.loser.name}</td>
+                ${setRowL}
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <table class="w-full text-sm table-auto border border-gray-300 shadow-sm rounded-lg overflow-hidden">
@@ -156,6 +209,9 @@ function searchMatchFlashcard() {
             <tr><td class="p-3">${dfW}</td><td class="font-medium text-gray-600">Double Faults</td><td>${dfL}</td></tr>
             <tr><td class="p-3">${bpW}</td><td class="font-medium text-gray-600">Break Points Won</td><td>${bpL}</td></tr>
             <tr><td class="p-3">${sgwW}</td><td class="font-medium text-gray-600">Service Games Won</td><td>${sgwL}</td></tr>
+            <tr><td class="p-3">${tpwW}</td><td class="font-medium text-gray-600">Total Points Won</td><td>${tpwL}</td></tr>
+            <tr><td class="p-3">${spwW}</td><td class="font-medium text-gray-600">Serve Points Won</td><td>${spwL}</td></tr>
+            <tr><td class="p-3">${rpwW}</td><td class="font-medium text-gray-600">Receiving Points Won</td><td>${rpwL}</td></tr>
           </tbody>
         </table>
       `;
@@ -165,3 +221,4 @@ function searchMatchFlashcard() {
       console.error(err);
     });
 }
+

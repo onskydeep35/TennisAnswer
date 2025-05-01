@@ -38,7 +38,7 @@ namespace FlashcardApi.Controllers
                 ? match.TourneyDate.Value.ToString("MMM dd, yyyy", CultureInfo.InvariantCulture)
                 : "Unknown";
 
-            Console.WriteLine(match.TourneyDate.ToString());
+            var (sets, winnerGames, loserGames, gameStatus) = ParseSetScores(match.Score);
 
             return Ok(new
             {
@@ -48,6 +48,7 @@ namespace FlashcardApi.Controllers
                 date = formattedDate,
                 round = NormalizeRound(match.Round),
                 score = match.Score,
+                gameFinishStatus = gameStatus,
                 winner = new
                 {
                     id = match.WinnerId,
@@ -69,7 +70,15 @@ namespace FlashcardApi.Controllers
                     breakPoints = $"{match.LBpFaced - match.LBpSaved}/{match.LBpFaced}",
                     serviceGamesWon = (match.LBpFaced - match.LBpSaved >= 0 && match.WServiceGames > 0)
                         ? $"{match.WServiceGames - (match.WBpFaced - match.WBpSaved)}"
-                        : "N/A"
+                        : "N/A",
+                    totalPointsWon = match.WFirstWon + match.WSecondWon + (match.LServePoints - match.LFirstWon - match.LSecondWon),
+                    servePointsWon = match.WFirstWon + match.WSecondWon,
+                    receivingPointsWon = match.LServePoints - match.LFirstWon - match.LSecondWon,
+                    set1Games = winnerGames[0],
+                    set2Games = winnerGames[1],
+                    set3Games = winnerGames[2],
+                    set4Games = winnerGames[3],
+                    set5Games = winnerGames[4],
                 },
                 loser = new
                 {
@@ -92,9 +101,64 @@ namespace FlashcardApi.Controllers
                     breakPoints = $"{match.WBpFaced - match.WBpSaved}/{match.WBpFaced}",
                     serviceGamesWon = (match.WBpFaced - match.WBpSaved >= 0 && match.LServiceGames > 0)
                         ? $"{match.LServiceGames - (match.LBpFaced - match.LBpSaved)}"
-                        : "N/A"
+                        : "N/A",
+                    totalPointsWon = match.LFirstWon + match.LSecondWon + (match.WServePoints - match.WFirstWon - match.WSecondWon),
+                    servePointsWon = match.LFirstWon + match.LSecondWon,
+                    receivingPointsWon = match.WServePoints - match.WFirstWon - match.WSecondWon,
+                    set1Games = loserGames[0],
+                    set2Games = loserGames[1],
+                    set3Games = loserGames[2],
+                    set4Games = loserGames[3],
+                    set5Games = loserGames[4],
                 }
             });
+        }
+
+        private static (string[] setStrings, int?[] winnerGames, int?[] loserGames, string gameStatus) ParseSetScores(string score)
+        {
+            var sets = new List<string>();
+            var winnerGames = new List<int?>();
+            var loserGames = new List<int?>();
+            var gameStatus = "Finished";
+
+            if (!string.IsNullOrWhiteSpace(score))
+            {
+                var rawSets = score.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var set in rawSets.Take(5))
+                {
+                    var cleanSet = set.Split('(')[0].Trim(); // remove tiebreak
+                    sets.Add(cleanSet);
+
+                    var games = cleanSet.Split('-');
+                    if (games.Length == 2 &&
+                        int.TryParse(games[0], out var w) &&
+                        int.TryParse(games[1], out var l))
+                    {
+                        winnerGames.Add(w);
+                        loserGames.Add(l);
+                    }
+                    else
+                    {
+                        winnerGames.Add(null);
+                        loserGames.Add(null);
+                    }
+
+                    if(games.Contains("W/O")){
+                        gameStatus = "Walkover";
+                    }
+                    if(games.Contains("RET")){
+                        gameStatus = "Retired";
+                    }
+                }
+            }
+
+            // Pad to 5 sets
+            while (sets.Count < 5) sets.Add(null);
+            while (winnerGames.Count < 5) winnerGames.Add(null);
+            while (loserGames.Count < 5) loserGames.Add(null);
+
+            return (sets.ToArray(), winnerGames.ToArray(), loserGames.ToArray(), gameStatus);
         }
 
         public static string NormalizeRound(string round)
