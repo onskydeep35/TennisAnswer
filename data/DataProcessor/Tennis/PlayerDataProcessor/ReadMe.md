@@ -33,7 +33,7 @@ Example row:
 
 ## Output
 
-The application creates or recreates a table named `tennis_players` inside the SQLite database. All valid rows from the CSV are inserted.
+The application inserts tennis players data into flashcards SQLite database table - `tennis_players`. All valid rows from the input CSV are inserted.
 
 ## Table Schema
 
