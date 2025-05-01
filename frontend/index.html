@@ -28,7 +28,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    input[type="text"], input[type="password"] {
+    input[type="text"], input[type="password"], input[type="number"] {
       padding: 10px;
       width: 80%;
       border: 1px solid #ccc;
@@ -51,7 +51,7 @@
       background-color: #2980b9;
     }
 
-    #answerResult, #authResult {
+    #playerResult, #matchResult, #authResult {
       margin-top: 20px;
       font-weight: bold;
       font-size: 18px;
@@ -80,9 +80,19 @@
 
   <!-- FLASHCARD SECTION -->
   <div id="container" style="display:none;">
-    <input type="text" id="questionInput" placeholder="Enter your question"><br>
-    <button onclick="searchFlashcard()">Search</button>
-    <p id="answerResult"></p>
+    <!-- Player Search -->
+    <h2>Player Flashcard</h2>
+    <input type="text" id="playerInput" placeholder="Enter FirstName LastName"><br>
+    <button onclick="searchPlayerFlashcard()">Search Player</button>
+    <p id="playerResult"></p>
+
+    <!-- Match Search -->
+    <h2>Match Flashcard</h2>
+    <input type="text" id="matchTourneyId" placeholder="Tournament ID"><br>
+    <input type="number" id="matchWinnerId" placeholder="Winner ID"><br>
+    <input type="number" id="matchLoserId" placeholder="Loser ID"><br>
+    <button onclick="searchMatchFlashcard()">Search Match</button>
+    <p id="matchResult"></p>
   </div>
 
   <script src="script.js"></script>
