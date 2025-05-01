@@ -25,14 +25,13 @@ namespace MatchDataProcessor.Services
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split(',');
-                if (parts.Length != 49) continue;
+                if (parts.Length != 50) continue;
 
                 try
                 {
-                    DateTime? parsedDate = null;
-
                     matches.Add(new Match
                     {
+                        MatchId = parts[49],
                         TourneyId = parts[0],
                         TourneyName = parts[1],
                         Surface = parts[2],

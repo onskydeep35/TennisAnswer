@@ -24,7 +24,7 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [X] Design schema for `tennis_matches` table  
 - [X] Build CSV ingestion logic for `tennis_matches`  
 - [X] Create ingestion runner for match data (with schema alignment)  
-- [ ] Develop `MatchFlashcardController` to expose matches via API  
+- [X] Develop `MatchFlashcardController` to expose matches via API  
 - [ ] Add tournament + year data model  
 - [ ] Parse matches into match history records between players  
 - [ ] Add player-metadata enrichment (e.g., Grand Slam titles, rankings if possible)  
@@ -35,18 +35,16 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 
 ### Flashcard Types
 - [x] Define `PlayerFlashcard` model (API controller & UI integrated)  
-- [ ] Define `MatchFlashcard` model (head-to-head or specific match)  
+- [X] Define single `MatchFlashcard` model 
+- [X] Define multi `MatchFlashcard` model (different scenatio usage - for H2H, torunament, player matches) 
 - [ ] Add flashcard rendering methods (to plain text or HTML)  
+- [ ] Add flashcard query (question) normalization functionalities
 - [ ] Add "pronunciation" field for flashcard (generated via CMUdict or eSpeak)  
 - [ ] Support flashcard categories: `Player`, `Match`, `Tournament`, `FunFact`  
 
 ### Flashcard Storage & Serving
 - [x] Serve flashcards from API (`GET /api/player/{name}`)  
-- [ ] Support `GET /flashcard/{question}`  
 - [ ] Add filtering by flashcard category  
-- [ ] Add `GET /flashcard/random` endpoint  
-- [ ] Migrate to key/value structure: `question → flashcard object`  
-- [ ] (Optional) Create Bond schema for flashcards  
 
 ---
 
@@ -74,10 +72,11 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [x] Integrate backend player flashcard API  
 - [X] Minimal UI for player flashcard
 - [ ] Improve UI for player flashcard
-- [ ] Integrate backend match flashcard API  
-- [ ] Minimal UI for match flashcard
+- [X] Integrate backend single match flashcard API  
+- [X] Minimal UI for match flashcard
 - [ ] Improve UI for match flashcard
-- [ ] Add filter by card type (Player / Match)  
+- [ ] Integrate backend multi match flashcard APIs
+- [ ] Minimal UI for match flashcard
 - [ ] Add keyboard navigation through results  
 
 ## Extension
@@ -111,7 +110,6 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 ## 🚀 FUTURE IDEAS
 
 - [ ] Add `TournamentFlashcard` (e.g., Wimbledon 2019 overview)  
-- [ ] Add pronunciation/audio support using eSpeak or pre-generated MP3s  
 - [ ] Add full player match history lookup  
 - [ ] Create quiz or training mode with spaced repetition  
 - [ ] Enable browser extension for in-page flashcard lookup  

@@ -1,13 +1,12 @@
-const flashcardApiUrl = "http://localhost:5019/flashcard";
-const authApiUrl = "http://localhost:5019/api/auth";
+const playerApiUrl = "http://localhost:5019/api/player";
+const matchApiUrl  = "http://localhost:5019/api/match";
+const authApiUrl   = "http://localhost:5019/api/auth";
 
-let flashcards = [];
 let currentUser = null;
 
 function showFlashcardsUI() {
   document.getElementById("authContainer").style.display = "none";
   document.getElementById("container").style.display = "block";
-  loadFlashcards();
 }
 
 function displayMessage(id, msg) {
@@ -54,35 +53,25 @@ function login(emailOverride = null, passwordOverride = null) {
     });
 }
 
-function loadFlashcards() {
-  fetch(flashcardApiUrl)
-    .then(res => res.json())
-    .then(data => {
-      flashcards = data;
-      console.log("Flashcards loaded:", flashcards);
-    })
-    .catch(err => console.error("Error loading flashcards:", err));
-}
-
-function searchFlashcard() {
-  const userInput = document.getElementById("questionInput").value.trim();
+// ------------------ Player Flashcard ------------------
+function searchPlayerFlashcard() {
+  const userInput = document.getElementById("playerInput").value.trim();
+  const resultEl = document.getElementById("playerResult");
+  resultEl.textContent = "";
 
   if (!userInput.includes(" ")) {
-    displayMessage("answerResult", "Please enter both first and last name.");
-    return;
+    return displayMessage("playerResult", "Please enter both first and last name.");
   }
 
-  fetch(`http://localhost:5019/api/player/${encodeURIComponent(userInput)}`)
+  fetch(`${playerApiUrl}/${encodeURIComponent(userInput)}`)
     .then(res => res.ok ? res.json() : res.text())
     .then(result => {
-      const answerElement = document.getElementById("answerResult");
-
       if (typeof result === "string") {
-        answerElement.textContent = result;
+        resultEl.textContent = result;
         return;
       }
 
-      answerElement.innerHTML = `
+      resultEl.innerHTML = `
         <strong>${result.name}</strong><br>
         ✋ Hand: ${result.hand}<br>
         🎂 DOB: ${result.dateOfBirth}<br>
@@ -90,10 +79,49 @@ function searchFlashcard() {
         🌎 Country: ${result.country} (${result.ioc})<br>
         🔗 WikiData: ${result.wikiDataId}
       `;
-
     })
     .catch(err => {
-      document.getElementById("answerResult").textContent = "Error fetching flashcard.";
+      displayMessage("playerResult", "Error fetching player flashcard.");
+      console.error(err);
+    });
+}
+
+// ------------------ Match Flashcard ------------------
+function searchMatchFlashcard() {
+  const tourneyId = document.getElementById("matchTourneyId").value.trim();
+  const winnerId = document.getElementById("matchWinnerId").value.trim();
+  const loserId  = document.getElementById("matchLoserId").value.trim();
+  const resultEl = document.getElementById("matchResult");
+  resultEl.textContent = "";
+
+  if (!tourneyId || !winnerId || !loserId) {
+    return displayMessage("matchResult", "Please fill all match fields.");
+  }
+
+  const url = `${matchApiUrl}/${encodeURIComponent(tourneyId)}/${encodeURIComponent(winnerId)}/${encodeURIComponent(loserId)}`;
+
+  fetch(url)
+    .then(res => res.ok ? res.json() : res.text())
+    .then(result => {
+      if (typeof result === "string") {
+        resultEl.textContent = result;
+        return;
+      }
+
+      resultEl.innerHTML = `
+        <strong>${result.tournament} (${result.date})</strong><br>
+        🏟 Surface: ${result.surface}<br>
+        🔄 Round: ${result.round}<br>
+        📊 Score: ${result.score}<br>
+        <hr>
+        <strong>Winner:</strong> ${result.winner.name} (${result.winner.hand})<br>
+        Aces: ${result.winner.aces}, DF: ${result.winner.doubleFaults}<br>
+        <strong>Loser:</strong> ${result.loser.name} (${result.loser.hand})<br>
+        Aces: ${result.loser.aces}, DF: ${result.loser.doubleFaults}
+      `;
+    })
+    .catch(err => {
+      displayMessage("matchResult", "Error fetching match flashcard.");
       console.error(err);
     });
 }
