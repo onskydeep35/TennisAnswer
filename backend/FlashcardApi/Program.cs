@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using FlashcardAPI.Data;
+using DataBase;
+using Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=flashcards.db"));
+    options.UseSqlite("Data Source=../../data/DataBase/flashcards.db"));
 
 builder.Services.AddControllers();
 

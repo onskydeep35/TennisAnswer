@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using DataBase;
+using Data.Models;
 
 namespace FlashcardAPI.Controllers;
 

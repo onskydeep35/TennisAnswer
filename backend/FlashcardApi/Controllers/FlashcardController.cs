@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using FlashcardAPI.Models;
+using Data.Models;
+using DataBase;
 using System.Text.Json;
 
 namespace FlashcardAPI.Controllers;
