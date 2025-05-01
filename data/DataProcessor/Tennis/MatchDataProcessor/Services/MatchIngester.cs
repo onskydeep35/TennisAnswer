@@ -16,6 +16,7 @@ namespace MatchDataProcessor.Services
         {
             string createTableSql = @"
                 CREATE TABLE tennis_matches (
+                    match_id TEXT PRIMARY KEY,
                     tourney_id TEXT,
                     tourney_name TEXT,
                     surface TEXT,
@@ -88,7 +89,7 @@ namespace MatchDataProcessor.Services
 
             command.CommandText = @"
                 INSERT INTO tennis_matches VALUES (
-                    @tourney_id, @tourney_name, @surface, @draw_size, @tourney_level, @tourney_date, @match_num,
+                    @match_id, @tourney_id, @tourney_name, @surface, @draw_size, @tourney_level, @tourney_date, @match_num,
                     @winner_id, @winner_seed, @winner_entry, @winner_name, @winner_hand, @winner_ht, @winner_ioc, @winner_age,
                     @loser_id, @loser_seed, @loser_entry, @loser_name, @loser_hand, @loser_ht, @loser_ioc, @loser_age,
                     @score, @best_of, @round, @minutes,
@@ -99,7 +100,7 @@ namespace MatchDataProcessor.Services
             ";
 
             string[] paramNames = new[] {
-                "@tourney_id", "@tourney_name", "@surface", "@draw_size", "@tourney_level", "@tourney_date", "@match_num",
+                "@match_id", "@tourney_id", "@tourney_name", "@surface", "@draw_size", "@tourney_level", "@tourney_date", "@match_num",
                 "@winner_id", "@winner_seed", "@winner_entry", "@winner_name", "@winner_hand", "@winner_ht", "@winner_ioc", "@winner_age",
                 "@loser_id", "@loser_seed", "@loser_entry", "@loser_name", "@loser_hand", "@loser_ht", "@loser_ioc", "@loser_age",
                 "@score", "@best_of", "@round", "@minutes",
@@ -115,6 +116,7 @@ namespace MatchDataProcessor.Services
 
             foreach (var match in matches)
             {
+                command.Parameters["@match_id"].Value = match.MatchId;
                 command.Parameters["@tourney_id"].Value = match.TourneyId;
                 command.Parameters["@tourney_name"].Value = match.TourneyName;
                 command.Parameters["@surface"].Value = match.Surface;

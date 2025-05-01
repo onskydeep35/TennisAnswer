@@ -6,6 +6,9 @@ namespace Data.Models.Tennis
     [Table("tennis_matches")]
     public class Match
     {
+        [Column("match_id")]
+        public string MatchId { get; set; }
+
         [Column("tourney_id")]
         public string TourneyId { get; set; }
 
