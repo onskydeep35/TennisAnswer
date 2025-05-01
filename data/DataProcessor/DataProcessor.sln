@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "..\Models\Models.csproj", "{DE21B459-BB20-443E-8C8C-F086D5708A66}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tennis", "Tennis", "{08395EB7-69A7-9362-8DD1-20F04ACAA314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerDataProcessor", "Tennis\PlayerDataProcessor\PlayerDataProcessor.csproj", "{BB74363E-2422-4FBC-9115-45FA3F4EE562}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|x64.Build.0 = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Debug|x86.Build.0 = Debug|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|x64.Build.0 = Release|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE21B459-BB20-443E-8C8C-F086D5708A66}.Release|x86.Build.0 = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|x64.Build.0 = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|x64.ActiveCfg = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|x64.Build.0 = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB74363E-2422-4FBC-9115-45FA3F4EE562} = {08395EB7-69A7-9362-8DD1-20F04ACAA314}
+	EndGlobalSection
+EndGlobal
