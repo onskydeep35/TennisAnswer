@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "d2D6Gi72JizPZ/HSUgCMdSV1uUg3BSQWO/PsnEx+Tbs=",
+  "Source": "FlashcardApi",
+  "BasePath": "_content/FlashcardApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcard Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #2c3e50;
+    }
+
+    #container {
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 500px;
+      margin: 40px auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #answerResult {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #2d3436;
+    }
+  </style>
+</head>
+<body>
+  <h1>Music Flashcard Search</h1>
+
+  <div id="container">
+    <input type="text" id="questionInput" placeholder="Enter your question"><br>
+    <button onclick="searchFlashcard()">Search</button>
+    <p id="answerResult"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
