@@ -18,8 +18,13 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [x] Create SQLite database and `tennis_players` table  
 - [x] Implement CSV ingestion for players (`PlayerProcessor`)  
 - [x] Implement player-to-country and hand mapping (via `Constants`)  
+- [x] Create ingestion logic with table recreation support (`DROP IF EXISTS`)  
+- [x] Develop API to retrieve player flashcards by full name  
+- [x] Display player flashcards in frontend via search  
 - [ ] Design schema for `tennis_matches` table  
-- [ ] Build CSV/JSON ingestion for matches  
+- [ ] Build CSV ingestion logic for `tennis_matches`  
+- [ ] Create ingestion runner for match data (with schema alignment)  
+- [ ] Develop `MatchFlashcardController` to expose matches via API  
 - [ ] Add tournament + year data model  
 - [ ] Parse matches into match history records between players  
 - [ ] Add player-metadata enrichment (e.g., Grand Slam titles, rankings if possible)  
@@ -29,14 +34,14 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 ## 📇 FLASHCARD ENGINE
 
 ### Flashcard Types
-- [x] Define `PlayerFlashcard` model  
+- [x] Define `PlayerFlashcard` model (API controller & UI integrated)  
 - [ ] Define `MatchFlashcard` model (head-to-head or specific match)  
 - [ ] Add flashcard rendering methods (to plain text or HTML)  
 - [ ] Add "pronunciation" field for flashcard (generated via CMUdict or eSpeak)  
 - [ ] Support flashcard categories: `Player`, `Match`, `Tournament`, `FunFact`  
 
 ### Flashcard Storage & Serving
-- [x] Serve flashcards from API  
+- [x] Serve flashcards from API (`GET /api/player/{name}`)  
 - [ ] Support `GET /flashcard/{question}`  
 - [ ] Add filtering by flashcard category  
 - [ ] Add `GET /flashcard/random` endpoint  
@@ -63,17 +68,34 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 
 ---
 
-## 🖥 FRONTEND (Optional - For Web Version)
+## 🖥 FRONTEND (For Web Version)
 
-- [ ] Minimal UI: input box, result panel  
-- [ ] Integrate backend search API  
+- [x] Minimal UI: input box, result panel  
+- [x] Integrate backend player flashcard API  
+- [X] Minimal UI for player flashcard
+- [ ] Improve UI for player flashcard
+- [ ] Integrate backend match flashcard API  
+- [ ] Minimal UI for match flashcard
+- [ ] Improve UI for match flashcard
 - [ ] Add filter by card type (Player / Match)  
 - [ ] Add keyboard navigation through results  
-- [ ] Add “Next Random Flashcard” button  
-- [ ] Make page mobile responsive  
-- [ ] Add animated reveal effect for flashcards  
 
----
+## Extension
+- [ ] Implement browser extension for this application
+
+## ✅ TESTING
+
+- [ ] ✅ Unit test for `PlayerProcessor.ReadFromCsv()` with valid and invalid rows  
+- [ ] ✅ Unit test for player hand and IOC mapping (L → Left-Handed, etc.)  
+- [ ] ✅ Integration test for `PlayerIngester.IngestPlayers()` using in-memory SQLite  
+- [ ] ✅ Test that `EnsureTableExists()` drops and recreates the table properly  
+- [ ] ✅ API test: `GET /api/player/{fullName}` returns valid flashcard JSON  
+- [ ] ✅ API test: returns 404 for unknown player name  
+- [ ] ✅ Test: CSV ingestion skips malformed rows gracefully  
+- [ ] ✅ Smoke test: full ingestion from CSV to API GET success  
+- [ ] ✅ Unit test for DOB format parsing (yyyyMMdd edge cases)  
+- [ ] ✅ Test frontend logic: displays correct player data on match  
+- [ ] ✅ Test frontend logic: displays "not found" when no match  
 
 ## ⚙ GENERAL IMPROVEMENTS
 
