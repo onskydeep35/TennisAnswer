@@ -18,9 +18,9 @@ namespace PlayerDataProcessor
         private const string _dataBasePath = "../../../DataBase/flashcards.db";
 
         /// <summary>
-        /// Default path to the sample CSV data file.
+        /// Default path to the original data file of atp players
         /// </summary>
-        private const string _sampleDataPath = "sampledata.csv";
+        private const string _originalPlayerDataFilePath = "atp_players.csv";
 
         /// <summary>
         /// Main execution method. Parses command-line arguments, reads CSV data, and ingests it into the database.
@@ -28,7 +28,7 @@ namespace PlayerDataProcessor
         /// <param name="args">Optional command-line arguments. The first argument may specify the CSV file path.</param>
         static void Main(string[] args)
         {
-            string csvPath = args.Length > 0 ? args[0] : _sampleDataPath;
+            string csvPath = args.Length > 0 ? args[0] : _originalPlayerDataFilePath;
 
             if (!File.Exists(csvPath))
             {

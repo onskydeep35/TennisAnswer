@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\data\database\database.csproj" />
-    <ProjectReference Include="..\..\data\models\models.csproj" />
+    <ProjectReference Include="..\..\data\DataBase\DataBase.csproj" />
+    <ProjectReference Include="..\..\data\Models\Models.csproj" />
   </ItemGroup>
   
 </Project>

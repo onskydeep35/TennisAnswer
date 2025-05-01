@@ -43,7 +43,7 @@ namespace PlayerDataProcessor.Services
                     Hand = Constants.PreferableHandMapping.TryGetValue(parts[3], out var hand) ? hand : "Undefined",
                     Dob = parsedDob,
                     Ioc = parts[5],
-                    Country = Constants.IocToCountry.TryGetValue(parts[3], out var country) ? country : "Undefined",
+                    Country = Constants.IocToCountry.TryGetValue(parts[5], out var country) ? country : "Undefined",
                     Height = string.IsNullOrWhiteSpace(parts[6]) ? null : int.Parse(parts[6]),
                     WikiDataId = parts[7]
                 });
