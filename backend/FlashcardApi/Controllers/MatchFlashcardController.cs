@@ -20,13 +20,10 @@ namespace FlashcardApi.Controllers
             _db = db;
         }
 
-        [HttpGet("{tourneyId}/{winnerId}/{loserId}")]
-        public async Task<IActionResult> GetMatchFlashcard(string tourneyId, int winnerId, int loserId)
+        [HttpGet("{matchId}")]
+        public async Task<IActionResult> GetMatchFlashcard(string matchId)
         {
-            var match = await _db.Matches.FirstOrDefaultAsync(m =>
-                m.TourneyId == tourneyId &&
-                m.WinnerId == winnerId &&
-                m.LoserId == loserId);
+            var match = await _db.Matches.FirstOrDefaultAsync(m => m.MatchId == matchId);
 
             if (match == null)
                 return NotFound("No such match found.");

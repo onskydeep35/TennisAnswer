@@ -88,17 +88,15 @@ function searchPlayerFlashcard() {
 }
 
 function searchMatchFlashcard() {
-  const tourneyId = document.getElementById("matchTourneyId").value.trim();
-  const winnerId = document.getElementById("matchWinnerId").value.trim();
-  const loserId  = document.getElementById("matchLoserId").value.trim();
+  const matchId = document.getElementById("matchId").value.trim();
   const resultEl = document.getElementById("matchResult");
   resultEl.textContent = "";
 
-  if (!tourneyId || !winnerId || !loserId) {
+  if (!matchId) {
     return displayMessage("matchResult", "Please fill all match fields.");
   }
 
-  fetch(`${matchApiUrl}/${encodeURIComponent(tourneyId)}/${encodeURIComponent(winnerId)}/${encodeURIComponent(loserId)}`)
+  fetch(`${matchApiUrl}/${encodeURIComponent(matchId)}`)
     .then(res => res.ok ? res.json() : res.text())
     .then(result => {
       if (typeof result === "string") {
