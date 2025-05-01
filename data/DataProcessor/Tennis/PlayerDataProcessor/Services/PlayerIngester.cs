@@ -17,6 +17,7 @@ namespace PlayerDataProcessor.Services
         /// <param name="connection">An open SQLite database connection.</param>
         public static void EnsureTableExists(SQLiteConnection connection)
         {
+            string dropTableSql = "DROP TABLE IF EXISTS tennis_players;";
             string createTableSql = @"
                 CREATE TABLE tennis_players (
                     player_id INTEGER PRIMARY KEY,
@@ -30,6 +31,12 @@ namespace PlayerDataProcessor.Services
                     wikidata_id TEXT
                 );
             ";
+
+            using (var dropCmd = new SQLiteCommand(dropTableSql, connection))
+            {
+                dropCmd.ExecuteNonQuery();
+                Console.WriteLine("Dropped existing tennis_players table if it existed.");
+            }
 
             using (var createCmd = new SQLiteCommand(createTableSql, connection))
             {

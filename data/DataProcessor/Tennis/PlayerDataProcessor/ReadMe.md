@@ -9,7 +9,7 @@ To run the application with a custom CSV path:
 > dotnet build
 > dotnet run -- "path/to/your.csv"
 
-To run the application with the default sample data (`sampleData.csv`):
+To run the application with the default original data (`atp_players.csv`):
 
 > dotnet run
 
@@ -47,4 +47,7 @@ The application inserts tennis players data into flashcards SQLite database tabl
 - `height` (INTEGER)  
 - `wikidata_id` (TEXT)
 
+## Data Source
 
+The historical ATP tennis player data [can be downloaded from here](https://www.kaggle.com/datasets/guillemservera/tennis)
+This CSV contains player metadata including names, handedness, birthdates, country codes, and more.
