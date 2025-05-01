@@ -17,7 +17,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="atp_players.csv">
+    <None Update="Dataset/atp_players.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

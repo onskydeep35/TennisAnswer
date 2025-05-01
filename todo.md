@@ -21,9 +21,9 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [x] Create ingestion logic with table recreation support (`DROP IF EXISTS`)  
 - [x] Develop API to retrieve player flashcards by full name  
 - [x] Display player flashcards in frontend via search  
-- [ ] Design schema for `tennis_matches` table  
-- [ ] Build CSV ingestion logic for `tennis_matches`  
-- [ ] Create ingestion runner for match data (with schema alignment)  
+- [X] Design schema for `tennis_matches` table  
+- [X] Build CSV ingestion logic for `tennis_matches`  
+- [X] Create ingestion runner for match data (with schema alignment)  
 - [ ] Develop `MatchFlashcardController` to expose matches via API  
 - [ ] Add tournament + year data model  
 - [ ] Parse matches into match history records between players  
