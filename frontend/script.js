@@ -1,6 +1,6 @@
 const playerApiUrl = "http://localhost:5019/api/player";
-const matchApiUrl  = "http://localhost:5019/api/match";
-const authApiUrl   = "http://localhost:5019/api/auth";
+const matchApiUrl = "http://localhost:5019/api/match";
+const authApiUrl = "http://localhost:5019/api/auth";
 
 let currentUser = null;
 
@@ -16,7 +16,6 @@ function displayMessage(id, msg) {
 function register() {
   const email = document.getElementById("regEmail").value;
   const password = document.getElementById("regPassword").value;
-
   if (!email || !password) return displayMessage("authResult", "Fill both fields.");
 
   fetch(`${authApiUrl}/register`, {
@@ -33,7 +32,6 @@ function register() {
 function login(emailOverride = null, passwordOverride = null) {
   const email = emailOverride || document.getElementById("loginEmail").value;
   const password = passwordOverride || document.getElementById("loginPassword").value;
-
   if (!email || !password) return displayMessage("authResult", "Fill both fields.");
 
   return fetch(`${authApiUrl}/login`, {
@@ -54,37 +52,148 @@ function login(emailOverride = null, passwordOverride = null) {
 }
 
 function searchPlayerFlashcard() {
-  const input = document.getElementById("playerInput").value.trim();
-  const resultEl = document.getElementById("playerResult");
-  resultEl.textContent = "";
+  const name = document.getElementById("playerInput").value.trim();
+  const playerResult = document.getElementById("playerResult");
+  const matchResult = document.getElementById("matchResult");
+  playerResult.innerHTML = "Loading...";
+  matchResult.innerHTML = "";
 
-  if (!input.includes(" ")) {
-    return displayMessage("playerResult", "Please enter both first and last name.");
+  if (!name.includes(" ")) {
+    return displayMessage("playerResult", "Please enter full name.");
   }
 
-  fetch(`${playerApiUrl}/${encodeURIComponent(input)}`)
-    .then(res => res.ok ? res.json() : res.text())
-    .then(result => {
-      if (typeof result === "string") {
-        resultEl.textContent = result;
-        return;
-      }
-
-      resultEl.innerHTML = `
-        <div class="bg-blue-50 border-l-4 border-blue-500 text-left p-4 rounded-md shadow">
-          <h3 class="text-lg font-semibold mb-1">${result.name}</h3>
-          <p>✋ Hand: <strong>${result.hand}</strong></p>
-          <p>🎂 DOB: <strong>${result.dateOfBirth}</strong></p>
-          <p>📏 Height: <strong>${result.height} cm</strong></p>
-          <p>🌍 Country: <strong>${result.country} (${result.ioc})</strong></p>
-          <p>🔗 WikiData ID: <strong>${result.wikiDataId}</strong></p>
+  fetch(`${playerApiUrl}/${encodeURIComponent(name)}`)
+    .then(res => res.ok ? res.json() : Promise.reject("Player not found"))
+    .then(player => {
+      playerResult.innerHTML = `
+        <div class="text-left border rounded-lg p-4 bg-white shadow">
+          <h2 class="text-xl font-semibold mb-2">${player.name}</h2>
+          <p><strong>Date of Birth:</strong> ${player.dateOfBirth}</p>
+          <p><strong>Country:</strong> ${player.country} (${player.ioc})</p>
+          <p><strong>Height:</strong> ${player.height} cm</p>
+          <p><strong>Plays:</strong> ${player.hand}</p>
         </div>
       `;
+      return fetch(`${playerApiUrl}/matches/${player.id}`);
+    })
+    .then(res => res.ok ? res.json() : Promise.reject("No matches found"))
+    .then(matches => {
+
+      const grouped = groupBy(matches, m => {
+        const year = m.tournamentYear;
+        return `${m.tournament}_${year}`;
+      });
+
+      const scrollWrapper = document.createElement("div");
+      scrollWrapper.className = "relative mt-6";
+
+      const container = document.createElement("div");
+      container.className = "flex gap-6 overflow-x-auto pb-4 scroll-smooth";
+      container.id = "tournamentScroll";
+
+      Object.entries(grouped).forEach(([key, games]) => {
+        const [tournament, year] = key.split("_");
+
+        games.sort((a, b) => b.matchNum - a.matchNum);
+
+        const col = document.createElement("div");
+        col.className = "min-w-[260px] flex-shrink-0";
+
+        col.innerHTML = `
+          <div class="bg-blue-100 p-3 rounded-lg shadow text-center mb-3">
+            <div class="text-lg font-semibold text-blue-900">${tournament}</div>
+            <div class="text-sm text-blue-700">${year}</div>
+          </div>
+          <div class="flex flex-col gap-2">
+            ${games.map(g => renderMiniMatchCard(g)).join("")}
+          </div>
+        `;
+
+        container.appendChild(col);
+      });
+
+      // Scroll buttons
+      const leftBtn = document.createElement("button");
+      const rightBtn = document.createElement("button");
+
+      [leftBtn, rightBtn].forEach(btn => {
+        btn.className = "absolute top-[42%] w-6 h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-sm rounded-full z-10 shadow";
+      });
+
+      leftBtn.innerHTML = "◀";
+      rightBtn.innerHTML = "▶";
+      leftBtn.style.left = "-10px";
+      rightBtn.style.right = "-10px";
+
+      leftBtn.onclick = () => container.scrollBy({ left: -300, behavior: "smooth" });
+      rightBtn.onclick = () => container.scrollBy({ left: 300, behavior: "smooth" });
+
+      scrollWrapper.appendChild(leftBtn);
+      scrollWrapper.appendChild(container);
+      scrollWrapper.appendChild(rightBtn);
+      playerResult.appendChild(scrollWrapper);
     })
     .catch(err => {
-      displayMessage("playerResult", "Error fetching player flashcard.");
-      console.error(err);
+      console.error("Error:", err);
+      playerResult.innerHTML = `<div class="text-red-600">${err}</div>`;
     });
+}
+
+function renderMiniMatchCard(game) {
+  const roundSurface = `
+    <div class="text-xs text-gray-600 font-medium mb-1">${game.round} • ${game.surface}</div>
+  `;
+
+  let winnerScores = "";
+  let loserScores = "";
+
+  for (let i = 1; i <= 5; i++) {
+    const w = game[`wset${i}Games`];
+    const l = game[`lset${i}Games`];
+    if (w == null && l == null) continue;
+
+    winnerScores += `<span class="${w > l ? 'font-bold text-black' : 'text-gray-500'} ml-2">${w}</span>`;
+    loserScores += `<span class="${l > w ? 'font-bold text-black' : 'text-gray-500'} ml-2">${l}</span>`;
+  }
+
+  const winnerLine = `
+    <div class="flex justify-between text-sm font-semibold text-gray-800">
+      <span>${game.winnerName}</span>
+      <span>${winnerScores}</span>
+    </div>`;
+
+  const loserLine = `
+    <div class="flex justify-between text-sm text-gray-700">
+      <span>${game.loserName}</span>
+      <span>${loserScores}</span>
+    </div>`;
+
+  const status = game.gameFinishStatus !== "Finished"
+    ? `<div class="text-xs text-red-500">${game.gameFinishStatus}</div>` : '';
+
+  return `
+    <div onclick="searchMatchFlashcardById('${game.matchId}')"
+         class="cursor-pointer border rounded-lg p-3 shadow bg-white hover:bg-blue-50 transition">
+      ${status}
+      ${roundSurface}
+      ${winnerLine}
+      ${loserLine}
+    </div>
+  `;
+}
+
+function groupBy(array, keyFn) {
+  return array.reduce((acc, item) => {
+    const key = keyFn(item);
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  }, {});
+}
+
+function searchMatchFlashcardById(id) {
+  document.getElementById("matchId").value = id;
+  searchMatchFlashcard();
 }
 
 function searchMatchFlashcard() {
@@ -219,4 +328,3 @@ function searchMatchFlashcard() {
       console.error(err);
     });
 }
-

@@ -164,7 +164,8 @@ namespace FlashcardApi.Controllers
             {
                 { "F", "Final" },
                 { "SF", "Semi-Final" },
-                { "QF", "Quarter-Final" }
+                { "QF", "Quarter-Final" },
+                { "RR", "Round Robin" },
             };
 
             if (roundMapping.TryGetValue(round, out var mapped))
