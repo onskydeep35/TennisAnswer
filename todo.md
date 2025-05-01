@@ -74,7 +74,7 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [ ] Improve UI for player flashcard
 - [X] Integrate backend single match flashcard API  
 - [X] Minimal UI for match flashcard
-- [ ] Improve UI for match flashcard
+- [X] Improve UI for match flashcard
 - [ ] Integrate backend multi match flashcard APIs
 - [ ] Minimal UI for match flashcard
 - [ ] Add keyboard navigation through results  
