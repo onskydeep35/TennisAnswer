@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using FlashcardAPI.Models;
-using FlashcardAPI.Data;
+using Data.Models;
+using DataBase;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;

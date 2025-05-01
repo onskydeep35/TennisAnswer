@@ -1,4 +1,4 @@
-namespace FlashcardAPI.Models;
+namespace Data.Models;
 
 public class Flashcard
 {

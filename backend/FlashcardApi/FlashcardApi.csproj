@@ -20,5 +20,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\data\database\database.csproj" />
+    <ProjectReference Include="..\..\data\models\models.csproj" />
+  </ItemGroup>
   
 </Project>
