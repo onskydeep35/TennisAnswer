@@ -1,98 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flashcard App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f7fa;
-      color: #333;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      margin-top: 40px;
-      color: #2c3e50;
-    }
-
-    #container, #authContainer {
-      background-color: #ffffff;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 30px;
-      max-width: 500px;
-      margin: 40px auto;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    input[type="text"], input[type="password"], input[type="number"] {
-      padding: 10px;
-      width: 80%;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      margin-bottom: 15px;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #2980b9;
-    }
-
-    #playerResult, #matchResult, #authResult {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 18px;
-      color: #2d3436;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800">
 
-  <h1>Flashcard App</h1>
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">🎾 Flashcard App</h1>
 
-  <!-- AUTH SECTION -->
-  <div id="authContainer">
-    <h2>Register</h2>
-    <input type="text" id="regEmail" placeholder="Email"><br>
-    <input type="password" id="regPassword" placeholder="Password"><br>
-    <button onclick="register()">Register</button>
+    <!-- Auth Section -->
+    <div id="authContainer" class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">Register</h2>
+      <input type="text" id="regEmail" placeholder="Email" class="input-field" />
+      <input type="password" id="regPassword" placeholder="Password" class="input-field" />
+      <button onclick="register()" class="btn-primary mb-6">Register</button>
 
-    <h2>Login</h2>
-    <input type="text" id="loginEmail" placeholder="Email"><br>
-    <input type="password" id="loginPassword" placeholder="Password"><br>
-    <button onclick="login()">Login</button>
+      <h2 class="text-xl font-semibold mb-4">Login</h2>
+      <input type="text" id="loginEmail" placeholder="Email" class="input-field" />
+      <input type="password" id="loginPassword" placeholder="Password" class="input-field" />
+      <button onclick="login()" class="btn-primary">Login</button>
 
-    <p id="authResult"></p>
-  </div>
+      <p id="authResult" class="text-red-600 font-medium mt-4"></p>
+    </div>
 
-  <!-- FLASHCARD SECTION -->
-  <div id="container" style="display:none;">
-    <!-- Player Search -->
-    <h2>Player Flashcard</h2>
-    <input type="text" id="playerInput" placeholder="Enter FirstName LastName"><br>
-    <button onclick="searchPlayerFlashcard()">Search Player</button>
-    <p id="playerResult"></p>
+    <!-- Flashcard Section -->
+    <div id="container" class="hidden bg-white rounded-lg shadow-md p-6 space-y-6">
+      <!-- Player Flashcard -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Player Flashcard</h2>
+        <input type="text" id="playerInput" placeholder="Enter FirstName LastName" class="input-field" />
+        <button onclick="searchPlayerFlashcard()" class="btn-secondary">Search Player</button>
+        <p id="playerResult" class="mt-4 font-medium"></p>
+      </div>
 
-    <!-- Match Search -->
-    <h2>Match Flashcard</h2>
-    <input type="text" id="matchTourneyId" placeholder="Tournament ID"><br>
-    <input type="number" id="matchWinnerId" placeholder="Winner ID"><br>
-    <input type="number" id="matchLoserId" placeholder="Loser ID"><br>
-    <button onclick="searchMatchFlashcard()">Search Match</button>
-    <p id="matchResult"></p>
+      <!-- Match Flashcard -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Match Flashcard</h2>
+        <input type="text" id="matchTourneyId" placeholder="Tournament ID" class="input-field" />
+        <input type="number" id="matchWinnerId" placeholder="Winner ID" class="input-field" />
+        <input type="number" id="matchLoserId" placeholder="Loser ID" class="input-field" />
+        <button onclick="searchMatchFlashcard()" class="btn-secondary">Search Match</button>
+        <div id="matchResult" class="mt-6"></div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
