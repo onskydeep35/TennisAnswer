@@ -5,8 +5,16 @@ using Data.Models.Tennis;
 
 namespace PlayerDataProcessor.Services
 {
+    /// <summary>
+    /// Provides functionality to create and populate the tennis_players table in an SQLite database.
+    /// </summary>
     public static class PlayerIngester
     {
+        /// <summary>
+        /// Ensures the tennis_players table exists in the SQLite database. 
+        /// Creates the table if it doesn't already exist.
+        /// </summary>
+        /// <param name="connection">An open SQLite database connection.</param>
         public static void EnsureTableExists(SQLiteConnection connection)
         {
             string createTableSql = @"
@@ -22,7 +30,7 @@ namespace PlayerDataProcessor.Services
                     wikidata_id TEXT
                 );
             ";
-            
+
             using (var createCmd = new SQLiteCommand(createTableSql, connection))
             {
                 createCmd.ExecuteNonQuery();
@@ -30,7 +38,12 @@ namespace PlayerDataProcessor.Services
             }
         }
 
-
+        /// <summary>
+        /// Inserts a list of <see cref="Player"/> records into the tennis_players table.
+        /// Duplicate entries (based on primary key) are ignored.
+        /// </summary>
+        /// <param name="connection">An open SQLite database connection.</param>
+        /// <param name="players">A list of <see cref="Player"/> objects to be inserted.</param>
         public static void IngestPlayers(SQLiteConnection connection, List<Player> players)
         {
             using var transaction = connection.BeginTransaction();

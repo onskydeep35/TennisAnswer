@@ -6,8 +6,16 @@ using System.Globalization;
 
 namespace PlayerDataProcessor.Services
 {
+    /// <summary>
+    /// Provides functionality to read and parse tennis player data from a CSV file.
+    /// </summary>
     public static class PlayerProcessor
     {
+        /// <summary>
+        /// Reads a CSV file and converts each row into a <see cref="Player"/> object.
+        /// </summary>
+        /// <param name="path">The path to the CSV file.</param>
+        /// <returns>A list of valid <see cref="Player"/> instances parsed from the file.</returns>
         public static List<Player> ReadFromCsv(string path)
         {
             var lines = File.ReadAllLines(path);
@@ -45,14 +53,23 @@ namespace PlayerDataProcessor.Services
         }
     }
 
+    /// <summary>
+    /// Provides constant lookup dictionaries for mapping player attributes such as hand preference and IOC country codes.
+    /// </summary>
     public static class Constants
     {
-        public static readonly Dictionary<string, string> PreferableHandMapping = new ()
+        /// <summary>
+        /// Maps single-character hand codes to descriptive strings.
+        /// </summary>
+        public static readonly Dictionary<string, string> PreferableHandMapping = new()
         {
-            {"L", "Left-Handed"},
-            {"R", "Right-Handed"}
+            { "L", "Left-Handed" },
+            { "R", "Right-Handed" }
         };
 
+        /// <summary>
+        /// Maps IOC (Internation Olympic Commitee) country codes to full country names.
+        /// </summary>
         public static readonly Dictionary<string, string> IocToCountry = new()
         {
             { "AFG", "Afghanistan" },
