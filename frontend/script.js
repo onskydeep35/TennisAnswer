@@ -65,13 +65,35 @@ function loadFlashcards() {
 }
 
 function searchFlashcard() {
-  const userInput = document.getElementById("questionInput").value.trim().toLowerCase();
-  const result = flashcards.find(f => f.question.toLowerCase() === userInput);
+  const userInput = document.getElementById("questionInput").value.trim();
 
-  const answerElement = document.getElementById("answerResult");
-  if (result) {
-    answerElement.textContent = `Answer: ${result.answer}`;
-  } else {
-    answerElement.textContent = "No matching flashcard found.";
+  if (!userInput.includes(" ")) {
+    displayMessage("answerResult", "Please enter both first and last name.");
+    return;
   }
+
+  fetch(`http://localhost:5019/api/player/${encodeURIComponent(userInput)}`)
+    .then(res => res.ok ? res.json() : res.text())
+    .then(result => {
+      const answerElement = document.getElementById("answerResult");
+
+      if (typeof result === "string") {
+        answerElement.textContent = result;
+        return;
+      }
+
+      answerElement.innerHTML = `
+        <strong>${result.name}</strong><br>
+        ✋ Hand: ${result.hand}<br>
+        🎂 DOB: ${result.dateOfBirth}<br>
+        📏 Height: ${result.height} cm<br>
+        🌎 Country: ${result.country} (${result.ioc})<br>
+        🔗 WikiData: ${result.wikiDataId}
+      `;
+
+    })
+    .catch(err => {
+      document.getElementById("answerResult").textContent = "Error fetching flashcard.";
+      console.error(err);
+    });
 }
