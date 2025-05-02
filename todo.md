@@ -6,6 +6,9 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 
 ## 🎾 BACKEND + DATA INGESTION (ASP.NET Core API + SQLite)
 
+### Refactoring
+- [ ] Refactor whole codebase with docs and have more scalable code
+
 ### Core API & Auth
 - [x] Set up ASP.NET Core Web API project  
 - [x] Set up basic user authorization system  
@@ -25,7 +28,6 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [X] Build CSV ingestion logic for `tennis_matches`  
 - [X] Create ingestion runner for match data (with schema alignment)  
 - [X] Develop `MatchFlashcardController` to expose matches via API  
-- [ ] Add tournament + year data model  
 - [ ] Parse matches into match history records between players  
 - [ ] Add player-metadata enrichment (e.g., Grand Slam titles, rankings if possible)  
 
@@ -37,7 +39,6 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [x] Define `PlayerFlashcard` model (API controller & UI integrated)  
 - [X] Define single `MatchFlashcard` model 
 - [X] Define multi `MatchFlashcard` model (different scenatio usage - for H2H, torunament, player matches) 
-- [ ] Add flashcard rendering methods (to plain text or HTML)  
 - [ ] Add flashcard query (question) normalization functionalities
 - [ ] Add "pronunciation" field for flashcard (generated via CMUdict or eSpeak)  
 - [ ] Support flashcard categories: `Player`, `Match`, `Tournament`, `FunFact`  
@@ -71,12 +72,11 @@ Organized by **Functional Areas**: Backend + Data Ingestion, Flashcard Engine, S
 - [x] Minimal UI: input box, result panel  
 - [x] Integrate backend player flashcard API  
 - [X] Minimal UI for player flashcard
-- [ ] Improve UI for player flashcard
+- [X] Improve UI for player flashcard
 - [X] Integrate backend single match flashcard API  
 - [X] Minimal UI for match flashcard
 - [X] Improve UI for match flashcard
-- [ ] Integrate backend multi match flashcard APIs
-- [ ] Minimal UI for match flashcard
+- [X] Integrate backend multi match flashcard APIs
 - [ ] Add keyboard navigation through results  
 
 ## Extension
