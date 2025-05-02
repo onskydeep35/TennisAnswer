@@ -5,12 +5,32 @@ const authApiUrl = "http://localhost:5019/api/auth";
 let currentUser = null;
 
 function showFlashcardsUI() {
-  document.getElementById("authContainer").classList.add("hidden");
-  document.getElementById("container").classList.remove("hidden");
+  const authEl = document.getElementById("authContainer");
+  const mainEl = document.getElementById("container");
+
+  if (authEl) authEl.classList.add("hidden");
+  if (mainEl) {
+    mainEl.classList.remove("hidden");
+    mainEl.classList.add("animate-fade-in");
+  } else {
+    console.error("Element with id='container' not found in DOM.");
+  }
 }
 
 function displayMessage(id, msg) {
   document.getElementById(id).textContent = msg;
+}
+
+function toggleAuthView(showRegister) {
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+  if (showRegister) {
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+  } else {
+    registerForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  }
 }
 
 function register() {
@@ -55,12 +75,14 @@ function searchPlayerFlashcard() {
   const name = document.getElementById("playerInput").value.trim();
   const playerResult = document.getElementById("playerResult");
   const matchResult = document.getElementById("matchResult");
-  playerResult.innerHTML = "Loading...";
+  playerResult.innerHTML = "";
   matchResult.innerHTML = "";
 
   if (!name.includes(" ")) {
     return displayMessage("playerResult", "Please enter full name.");
   }
+
+  playerResult.innerHTML = `<div class='text-center text-gray-500'>Loading...</div>`;
 
   fetch(`${playerApiUrl}/${encodeURIComponent(name)}`)
     .then(res => res.ok ? res.json() : Promise.reject("Player not found"))
@@ -78,11 +100,7 @@ function searchPlayerFlashcard() {
     })
     .then(res => res.ok ? res.json() : Promise.reject("No matches found"))
     .then(matches => {
-
-      const grouped = groupBy(matches, m => {
-        const year = m.tournamentYear;
-        return `${m.tournament}_${year}`;
-      });
+      const grouped = groupBy(matches, m => `${m.tournament}_${m.tournamentYear}`);
 
       const scrollWrapper = document.createElement("div");
       scrollWrapper.className = "relative mt-6";
@@ -93,21 +111,36 @@ function searchPlayerFlashcard() {
 
       Object.entries(grouped).forEach(([key, games]) => {
         const [tournament, year] = key.split("_");
-
         games.sort((a, b) => b.matchNum - a.matchNum);
+
+        const surface = games[0].surface?.toLowerCase();
+        const bgColor = surface === "clay" ? "bg-orange-100"
+                       : surface === "hard" ? "bg-blue-100"
+                       : surface === "grass" ? "bg-green-100"
+                       : surface === "carpet" ? "bg-yellow-100"
+                       : "bg-gray-100";
 
         const col = document.createElement("div");
         col.className = "min-w-[260px] flex-shrink-0";
 
-        col.innerHTML = `
-          <div class="bg-blue-100 p-3 rounded-lg shadow text-center mb-3">
-            <div class="text-lg font-semibold text-blue-900">${tournament}</div>
-            <div class="text-sm text-blue-700">${year}</div>
-          </div>
-          <div class="flex flex-col gap-2">
-            ${games.map(g => renderMiniMatchCard(g)).join("")}
-          </div>
+        const header = document.createElement("div");
+        header.className = `${bgColor} p-3 rounded-lg shadow text-center mb-3`;
+        header.innerHTML = `
+          <div class="text-lg font-semibold text-blue-900">${tournament}</div>
+          <div class="text-sm text-blue-700">${year}</div>
         `;
+        col.appendChild(header);
+        
+        // Match list
+        const matchList = document.createElement("div");
+        matchList.className = "flex flex-col gap-2";
+        
+        games.forEach(g => {
+          const matchCard = renderMiniMatchCard(g); // returns DOM element now
+          matchList.appendChild(matchCard);
+        });
+        
+        col.appendChild(matchList);
 
         container.appendChild(col);
       });
@@ -156,30 +189,31 @@ function renderMiniMatchCard(game) {
     loserScores += `<span class="${l > w ? 'font-bold text-black' : 'text-gray-500'} ml-2">${l}</span>`;
   }
 
-  const winnerLine = `
+  const modalId = `modal-${game.matchId}`;
+
+  const matchCard = document.createElement("div");
+  matchCard.className = "cursor-pointer border rounded-lg p-3 shadow bg-white hover:bg-blue-50 transition";
+  matchCard.innerHTML = `
+    <div class="text-xs text-red-500">${game.gameFinishStatus !== "Finished" ? game.gameFinishStatus : ""}</div>
+    ${roundSurface}
     <div class="flex justify-between text-sm font-semibold text-gray-800">
       <span>${game.winnerName}</span>
       <span>${winnerScores}</span>
-    </div>`;
-
-  const loserLine = `
+    </div>
     <div class="flex justify-between text-sm text-gray-700">
       <span>${game.loserName}</span>
       <span>${loserScores}</span>
-    </div>`;
-
-  const status = game.gameFinishStatus !== "Finished"
-    ? `<div class="text-xs text-red-500">${game.gameFinishStatus}</div>` : '';
-
-  return `
-    <div onclick="searchMatchFlashcardById('${game.matchId}')"
-         class="cursor-pointer border rounded-lg p-3 shadow bg-white hover:bg-blue-50 transition">
-      ${status}
-      ${roundSurface}
-      ${winnerLine}
-      ${loserLine}
     </div>
   `;
+
+  matchCard.onclick = () => {
+    console.log("Match card clicked:", game.matchId);
+    console.log("Match card clicked:", game.winnerName);
+    searchMatchFlashcardById(game.matchId);
+    document.getElementById("matchResult").scrollIntoView({ behavior: "smooth" });
+  };
+
+  return matchCard;
 }
 
 function groupBy(array, keyFn) {
@@ -192,12 +226,14 @@ function groupBy(array, keyFn) {
 }
 
 function searchMatchFlashcardById(id) {
-  document.getElementById("matchId").value = id;
-  searchMatchFlashcard();
+  searchMatchFlashcard(id);
 }
 
-function searchMatchFlashcard() {
-  const matchId = document.getElementById("matchId").value.trim();
+// searchMatchFlashcard() remains unchanged
+
+
+function searchMatchFlashcard(matchId) {
+  //const matchId = document.getElementById("matchId").value.trim();
   const resultEl = document.getElementById("matchResult");
   resultEl.textContent = "";
 
@@ -209,9 +245,12 @@ function searchMatchFlashcard() {
     .then(res => res.ok ? res.json() : res.text())
     .then(result => {
       if (typeof result === "string") {
+        console.warn("⚠️ Fetch returned error string:", result);
         resultEl.textContent = result;
         return;
       }
+      console.log("✅ Match object:", result);
+      openMatchModal();
 
       function highlightStat(wVal, lVal, lowerIsBetter = false) {
         const w = parseFloat(wVal);
@@ -271,7 +310,13 @@ function searchMatchFlashcard() {
         setRowW += `<td class="p-2">${hw}</td>`;
         setRowL += `<td class="p-2">${hl}</td>`;
       }
-
+      
+      console.log("📍 resultEl is:", resultEl);
+      if (!resultEl) {
+        console.error("❌ matchResult element not found");
+        return;
+      }
+      
       resultEl.innerHTML = `
         <div class="match-summary mb-6">
           ${finishNote}
@@ -327,4 +372,40 @@ function searchMatchFlashcard() {
       displayMessage("matchResult", "Error fetching match flashcard.");
       console.error(err);
     });
+}
+
+function toggleRegister() {
+  const auth = document.getElementById('authContainer');
+  const reg = document.getElementById('registerContainer');
+  auth.classList.toggle('hidden');
+  reg.classList.toggle('hidden');
+}
+
+function openMatchModal() {
+  let modal = document.getElementById("matchModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "matchModal";
+    modal.className = "fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center";
+
+    modal.innerHTML = `
+      <div class="relative bg-white w-full max-w-3xl p-6 rounded-lg shadow-lg overflow-y-auto max-h-[90vh]">
+        <button onclick="closeMatchModal()" class="absolute top-2 right-2 text-gray-700 hover:text-red-600">✖</button>
+        <div id="matchResult"></div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+  } else {
+    modal.classList.remove("hidden");
+  }
+
+  document.getElementById("container").classList.add("opacity-50");
+}
+
+
+function closeMatchModal() {
+  const modal = document.getElementById("matchModal");
+  modal.classList.add("hidden");
+  document.getElementById("container").classList.remove("opacity-50");
 }
